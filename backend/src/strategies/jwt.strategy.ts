@@ -24,9 +24,9 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   public async validate(payload: JwtPayload): Promise<Account> {
-    const { user_name } = payload
+    const { email } = payload
 
-    const account = await this.authorizationService.getAccountByUsername(user_name)
+    const account = await this.authorizationService.getAccountByEmail(email)
 
     if (!account) {
       throw new UnauthorizedException('Missing or invalid token')

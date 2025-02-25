@@ -22,7 +22,7 @@ export class AuthService {
   public async loginVerify(token: string): Promise<Profile> {
     const decodedToken = this.jwtService.verify(token)
 
-    const account = await this.accountRepository.getAccountProfileAndRoleByUsername(decodedToken.user_name)
+    const account = await this.accountRepository.getAccountProfileAndRoleByEmail(decodedToken.email)
 
     return this.populateAccountProfile(account)
   }
@@ -35,6 +35,14 @@ export class AuthService {
 
   public async getAccountProfileAndRoleByUsername(username: string): Promise<Account> {
     return await this.accountRepository.getAccountProfileAndRoleByUsername(username)
+  }
+
+  public async getAccountByEmail(email: string): Promise<Account> {
+    return await this.accountRepository.getAccountByEmail(email)
+  }
+
+  public async getAccountProfileAndRoleByEmail(email: string): Promise<Account> {
+    return await this.accountRepository.getAccountProfileAndRoleByEmail(email)
   }
 
   public async login(
@@ -58,7 +66,7 @@ export class AuthService {
 
     const payload: JwtPayload = {
       role_id: account.role.id,
-      user_name: account.user_name,
+      email: account.email,
       expiration: Date.now() + parseInt(process.env.JWT_EXPIRATION_TIME)
     }
 

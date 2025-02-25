@@ -23,6 +23,19 @@ export class AccountRepository extends Repository<Account> {
     return account
   }
 
+  public async getAccountByEmail(email: string): Promise<Account> {
+    return await this.createQueryBuilder('account')
+      .leftJoinAndSelect('account.profile', 'profile')
+      .leftJoinAndSelect('profile.avatar_attachment', 'attachment')
+      .leftJoinAndSelect('profile.title', 'title')
+      .where('account.email = :email', { email: email })
+      .getOne()
+  }
+
+  public async getAccountProfileAndRoleByEmail(email: string): Promise<Account> {
+    return this.findOne({ where: { email: email }, relations: ['profile', 'role'] })
+  }
+
   public async getAccountProfileAndRoleByUsername(username: string): Promise<Account> {
     const account = this.findOne({ where: { user_name: username }, relations: ['profile', 'role'] })
 

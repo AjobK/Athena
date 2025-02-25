@@ -15,7 +15,7 @@ class LoginPrompt extends Component {
     super(props)
 
     this.state = {
-      username: null,
+      email: null,
       password: null,
       remainingTimeInterval: null,
       remainingTime: null,
@@ -33,7 +33,7 @@ class LoginPrompt extends Component {
     Axios.defaults.baseURL = defaultData.backendUrl
 
     const payload = {
-      username: document.getElementById(this.elId.Username).value,
+      email: document.getElementById(this.elId.Email).value,
       password: document.getElementById(this.elId.Password).value,
       captcha: captchaToken
     }
@@ -55,7 +55,7 @@ class LoginPrompt extends Component {
           NotificationUtil.showNotification(this.props.store, popUpData.messages.networkError)
 
           return this.setState({
-            username: ['No connection'],
+            email: ['No connection'],
             password: ['No connection'],
             loadingTimeout: false,
           })
@@ -63,7 +63,7 @@ class LoginPrompt extends Component {
 
         if (res.response.data.message) {
           const errors = {
-            username: [],
+            email: [],
             password: []
           }
 
@@ -74,7 +74,7 @@ class LoginPrompt extends Component {
           }
 
           return this.setState({
-            username: errors.username,
+            email: errors.email,
             password: errors.password,
             loadingTimeout: false,
           })
@@ -85,7 +85,7 @@ class LoginPrompt extends Component {
         if (remainingTime) this.setRemainingTimeInterval(remainingTime)
 
         this.setState({
-          username: errors || [],
+          email: errors || [],
           password: errors || [],
           loadingTimeout: false,
         })
@@ -135,7 +135,7 @@ class LoginPrompt extends Component {
 
   handleVerificationSuccess(token) {
     this.setState({
-      username: 'loading',
+      email: 'loading',
       password: 'loading',
       loadingTimeout: true,
     })
@@ -151,7 +151,7 @@ class LoginPrompt extends Component {
   }
 
   render() {
-    const { username, password, remainingTime, loadingTimeout } = this.state
+    const { email, password, remainingTime, loadingTimeout } = this.state
 
     return (
       <div className={ [styles.prompt, this.props.className].join(' ') }>
@@ -161,8 +161,8 @@ class LoginPrompt extends Component {
           <form onSubmit={ this.onSubmit } className={ styles.form }>
             <FormInput
               toolTipDirection={ 'bottom' }
-              name={ 'Username' }
-              errors={ username }
+              name={ 'Email' }
+              errors={ email }
               className={ [styles.formGroup] }
               callBack={ this.setElId }
               type="text"
